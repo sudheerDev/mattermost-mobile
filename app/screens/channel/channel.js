@@ -17,7 +17,6 @@ import DeviceInfo from 'react-native-device-info';
 import EventEmitter from 'mattermost-redux/utils/event_emitter';
 
 import EmptyToolbar from 'app/components/start/empty_toolbar';
-import ChannelLoader from 'app/components/channel_loader';
 import MainSidebar from 'app/components/sidebars/main';
 import SettingsSidebar from 'app/components/sidebars/settings';
 import KeyboardLayout from 'app/components/layout/keyboard_layout';
@@ -316,7 +315,6 @@ export default class Channel extends PureComponent {
         const {
             channelsRequestFailed,
             currentChannelId,
-            isLandscape,
             navigator,
             theme,
         } = this.props;
@@ -345,8 +343,6 @@ export default class Channel extends PureComponent {
                 </SafeAreaView>
             );
         }
-
-        const loaderDimensions = this.channelLoaderDimensions();
 
         // console.warn('height', height, Date.now())
         return (
@@ -378,10 +374,6 @@ export default class Channel extends PureComponent {
                                 navigator={navigator}
                             />
                         </KeyboardLayout>
-                        <ChannelLoader
-                            style={[style.channelLoader, loaderDimensions]}
-                            maxRows={isLandscape ? 4 : 6}
-                        />
                         {LocalConfig.EnableMobileClientUpgrade && <ClientUpgradeListener navigator={navigator}/>}
                     </SafeAreaView>
                 </SettingsSidebar>

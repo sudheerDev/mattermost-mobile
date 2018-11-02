@@ -9,7 +9,7 @@ import {getTeams} from 'mattermost-redux/actions/teams';
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeamId, getMyTeamsCount} from 'mattermost-redux/selectors/entities/teams';
 
-import {setChannelDisplayName, setChannelLoading} from 'app/actions/views/channel';
+import {setChannelDisplayName, setChannelLoading, handleSelectChannel} from 'app/actions/views/channel';
 import {makeDirectChannel} from 'app/actions/views/more_dms';
 import {isLandscape, isTablet, getDimensions} from 'app/selectors/device';
 
@@ -37,6 +37,7 @@ function mapDispatchToProps(dispatch) {
             makeDirectChannel,
             setChannelDisplayName,
             setChannelLoading,
+            handleSelectChannel,
         }, dispatch),
     };
 }

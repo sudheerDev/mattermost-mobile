@@ -145,7 +145,7 @@ export default class Root extends PureComponent {
 
     render() {
         const locale = this.props.locale;
-
+        console.log('render root');
         return (
             <IntlProvider
                 ref='provider'

@@ -171,14 +171,24 @@ export default class ChannelSidebar extends Component {
         const {
             setChannelLoading,
             setChannelDisplayName,
+            handleSelectChannel,
         } = actions;
 
         tracker.channelSwitch = Date.now();
+        this.closeChannelDrawer();
+        // requestAnimationFrame(() => {
+            setChannelDisplayName(channel.display_name);
+            handleSelectChannel(channel.id);
+        // });
+        // if (closeDrawer) {
 
-        if (closeDrawer) {
-            this.closeChannelDrawer();
-            setChannelLoading(channel.id !== currentChannelId);
-        }
+            // setChannelLoading(channel.id !== currentChannelId);
+        // }
+
+        // // setTimeout(() => {
+        //     setChannelDisplayName(channel.display_name);
+        //     handleSelectChannel(channel.id);
+        // // }, 0);
 
         if (!channel) {
             const utils = require('app/utils/general');
@@ -195,8 +205,7 @@ export default class ChannelSidebar extends Component {
             return;
         }
 
-        setChannelDisplayName(channel.display_name);
-        EventEmitter.emit('switch_channel', channel, currentChannelId);
+        // EventEmitter.emit('switch_channel', channel, currentChannelId);
     };
 
     joinChannel = (channel, currentChannelId) => {
