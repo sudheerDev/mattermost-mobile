@@ -74,13 +74,13 @@ export default class NetworkIndicator extends PureComponent {
 
         this.backgroundColor = new Animated.Value(0);
         this.firstRun = true;
-
         this.networkListener = networkConnectionListener(this.handleConnectionChange);
+        this.state = {
+            appState: 'active',
+        };
     }
 
     componentDidMount() {
-        this.mounted = true;
-
         AppState.addEventListener('change', this.handleAppStateChange);
 
         // Attempt to connect when this component mounts
@@ -124,8 +124,6 @@ export default class NetworkIndicator extends PureComponent {
     }
 
     componentWillUnmount() {
-        this.mounted = false;
-
         this.networkListener.removeEventListener();
         AppState.removeEventListener('change', this.handleAppStateChange);
 
@@ -224,11 +222,8 @@ export default class NetworkIndicator extends PureComponent {
 
     handleAppStateChange = async (appState) => {
         const {currentChannelId} = this.props;
-        const active = appState === 'active';
-
-        if (active) {
+        if (this.state.appState.match(/inactive|background/) && appState === 'active') {
             this.connect(true);
-
             if (currentChannelId) {
                 // Clear the notifications for the current channel after one second
                 // this is done so we can cancel it in case the app is brought to the
@@ -240,6 +235,10 @@ export default class NetworkIndicator extends PureComponent {
         } else {
             this.handleWebSocket(false);
         }
+
+        this.setState({
+            appState,
+        });
     };
 
     handleConnectionChange = ({hasInternet, serverReachable}) => {
