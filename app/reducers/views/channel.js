@@ -262,6 +262,7 @@ function postVisibility(state = {}, action) {
     case ViewTypes.SET_INITIAL_POST_VISIBILITY: {
         const nextState = {...state};
         nextState[action.data] = ViewTypes.POST_VISIBILITY_CHUNK_SIZE;
+        console.log(nextState);
         return nextState;
     }
     case ViewTypes.INCREASE_POST_VISIBILITY: {
@@ -271,6 +272,7 @@ function postVisibility(state = {}, action) {
         } else {
             nextState[action.data] = action.amount;
         }
+        console.log('increment',nextState);
         return nextState;
     }
     case ViewTypes.RECEIVED_FOCUSED_POST: {

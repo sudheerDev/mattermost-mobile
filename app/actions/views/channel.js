@@ -51,6 +51,7 @@ import {getPreferencesByCategory} from 'mattermost-redux/utils/preference_utils'
 
 import {INSERT_TO_COMMENT, INSERT_TO_DRAFT} from 'app/constants/post_textbox';
 import {isDirectChannelVisible, isGroupChannelVisible} from 'app/utils/channels';
+import {isCombinedUserActivityPost, getPostIdsForCombinedUserActivityPost} from 'mattermost-redux/utils/post_list';
 
 const MAX_POST_TRIES = 3;
 
@@ -599,8 +600,6 @@ export function increasePostVisibility(channelId, postId) {
     return async (dispatch, getState) => {
         const state = getState();
         const {loadingPosts, postVisibility} = state.views.channel;
-        const currentPostVisibility = postVisibility[channelId] || 0;
-
         if (loadingPosts[channelId]) {
             return true;
         }
@@ -612,12 +611,15 @@ export function increasePostVisibility(channelId, postId) {
 
         // Check if we already have the posts that we want to show
         const loadedPostCount = state.views.channel.postCountInChannel[channelId] || 0;
+        const currentPostVisibility = postVisibility[channelId] || 0;
+
         const desiredPostVisibility = currentPostVisibility + ViewTypes.POST_VISIBILITY_CHUNK_SIZE;
 
         if (loadedPostCount >= desiredPostVisibility) {
-            // We already have the posts, so we just need to show them
+            const desiredIncreaseInPostVisibility = postVisibility[channelId] ? ViewTypes.POST_VISIBILITY_CHUNK_SIZE : 2 * ViewTypes.POST_VISIBILITY_CHUNK_SIZE;
+            console.log(desiredIncreaseInPostVisibility, postVisibility[channelId]);
             dispatch(batchActions([
-                doIncreasePostVisibility(channelId),
+                doIncreasePostVisibility(channelId, desiredIncreaseInPostVisibility),
                 setLoadMorePostsVisible(true),
             ]));
 
@@ -671,11 +673,12 @@ export function increasePostVisibility(channelId, postId) {
     };
 }
 
-function doIncreasePostVisibility(channelId) {
+function doIncreasePostVisibility(channelId, amount = ViewTypes.POST_VISIBILITY_CHUNK_SIZE) {
+    console.log(amount);
     return {
         type: ViewTypes.INCREASE_POST_VISIBILITY,
         data: channelId,
-        amount: ViewTypes.POST_VISIBILITY_CHUNK_SIZE,
+        amount,
     };
 }
 

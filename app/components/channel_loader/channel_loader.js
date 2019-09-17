@@ -112,10 +112,10 @@ export default class ChannelLoader extends PureComponent {
 
             const {channel} = this.state;
 
-            setTimeout(() => {
+            // setTimeout(() => {
                 handleSelectChannel(channel.id);
                 setChannelLoading(false);
-            }, 250);
+            // }, 250);
         }
     }
 

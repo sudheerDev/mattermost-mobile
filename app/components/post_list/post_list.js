@@ -120,6 +120,12 @@ export default class PostList extends PureComponent {
         if (!this.hasDoneInitialScroll && this.props.initialIndex > 0 && this.state.contentHeight) {
             this.scrollToInitialIndexIfNeeded(this.props.initialIndex);
         }
+
+        if (PostListUtils.getLastPostIndex(this.props.postIds) !== PostListUtils.getFirstPostId(prevProps.postIds)) {
+            if (this.state.postListHeight && this.state.contentHeight < this.state.postListHeight && this.props.extraData) {
+                this.props.onLoadMoreUp();
+            }
+        }
     }
 
     componentWillUnmount() {
@@ -146,6 +152,9 @@ export default class PostList extends PureComponent {
                 // We still have less than 1 screen of posts loaded with more to get, so load more
                 this.props.onLoadMoreUp();
             }
+            return {
+                contentHeight,
+            };
         });
     };
 
